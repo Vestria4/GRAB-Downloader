@@ -58,7 +58,28 @@
         }
     </style>
     <script>
-        // JavaScript code remains the same as before
+        async function download(link) {
+            let SERVER_URL = 'https://api.slin.dev/grab/v1/';
+            let id = link.match(/level=([^&]+)/)[1];
+
+            try {
+                let response = await fetch(SERVER_URL + 'details/' + id.replace(':', '/'));
+                let details = await response.json();
+                let downloadLink = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + details.iteration;
+                let fileResponse = await fetch(downloadLink);
+                let fileBlob = await fileResponse.blob();
+                let url = window.URL.createObjectURL(fileBlob);
+                let a = document.createElement('a');
+                a.href = url;
+                let fileName = Date.now() + '.level';
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
     </script>
 </head>
 <body>
