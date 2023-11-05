@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Manipulation</title>
+    <title>Grab Level Downloader</title>
     <script>
         function processURL() {
             var inputUrl = document.getElementById("inputUrl").value;
@@ -16,8 +16,8 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    var dataKeyNumber = data.data_key.split(":")[3];
-                    var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${dataKey}/${dataKeyNumber}`;
+                    var dataKeyNumber = data.data_key.split(":").pop(); // Get the last segment after splitting by ':'
+                    var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${dataKeyNumber}/#`;
                     
                     // Redirect to the final download URL
                     window.location.href = downloadUrl;
