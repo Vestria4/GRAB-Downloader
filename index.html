@@ -8,12 +8,13 @@
         function download(link) {
             let SERVER_URL = 'https://api.slin.dev/grab/v1/';
             let id = link.match(/level=([^&]+)/)[1];
+            let iteration;
+            
             fetch(SERVER_URL + 'details/' + id.replace(':', '/'))
                 .then(response => response.json())
                 .then(details => {
-                    let iteration = details.iteration;
+                    iteration = details.iteration;
                     link = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + iteration;
-
                     return fetch(link);
                 })
                 .then(fileResponse => fileResponse.blob())
@@ -21,7 +22,7 @@
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    a.download = iteration + '.level'; // Using the extracted iteration number as the filename
+                    a.download = iteration + '.level';
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);
