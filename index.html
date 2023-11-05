@@ -1,37 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrabVR Level Downloader</title>
-    <script>
-        async function download(link) {
-            let SERVER_URL = 'https://api.slin.dev/grab/v1/';
-            let id = link.split('=')[1];
-            let response = await fetch(SERVER_URL + 'details/' + id.replace(':', '/'));
-            let details = await response.json();
-            let iteration = await details.iteration;
+function download(link) {
+    let SERVER_URL = 'https://api.slin.dev/grab/v1/';
+    let id = link.split('=')[1];
+    fetch(SERVER_URL + 'details/' + id.replace(':', '/'))
+        .then(response => response.json())
+        .then(details => {
+            let iteration = details.iteration;
             link = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + iteration;
 
-            let fileResponse = await fetch(link);
-            let fileBlob = await fileResponse.blob();
-            let url = window.URL.createObjectURL(fileBlob);
+            return fetch(link);
+        })
+        .then(fileResponse => fileResponse.blob())
+        .then(blob => {
+            let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
-
-            // Set the download filename to the specific number
-            a.download = iteration + '.level';
-
+            a.download = id + '.level'; // Using the original ID as the filename
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
-        }
-    </script>
-</head>
-<body>
-    <h1>GrabVR Level Downloader</h1>
-    <label for="inputUrl">Enter GrabVR Level Link:</label>
-    <input type="text" id="inputUrl" placeholder="https://grabvr.quest/levels/viewer/?level=...">
-    <button onclick="download(document.getElementById('inputUrl').value)">Download Level</button>
-</body>
-</html>
+        })
+        .catch(error => console.error('Error:', error));
+}
