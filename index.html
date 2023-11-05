@@ -3,28 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab Level Downloader</title>
+    <title>URL Manipulation</title>
     <script>
         function processURL() {
             var inputUrl = document.getElementById("inputUrl").value;
             var levelId = inputUrl.match(/level=([^&]+)/)[1];
             var userId = levelId.split(":")[0];
             var dataKey = levelId.replace(":", "/").replace(":", "/");
-            var apiUrl = `https://api.slin.dev/grab/v1/list?max_format_version=7&user_id=${userId}`;
 
-            // Fetch the data_key from the API
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    var dataKeyNumber = data.data_key.split(":").pop(); // Get the last segment after splitting by ':'
-                    var downloadUrl = `https://api.slin.dev/grab/v1/download/${data_key}`;
-                    
-                    // Redirect to the final download URL
-                    window.location.href = downloadUrl;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            // Fetch the data_key from the input URL and remove prefix
+            var dataKeyRegex = /"data_key": "level_data:(.*?)"/;
+            var dataKeyMatch = inputUrl.match(dataKeyRegex);
+            if (dataKeyMatch && dataKeyMatch.length > 1) {
+                var extractedDataKey = dataKeyMatch[1];
+                var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${extractedDataKey.replace(/:/g, "/")}`;
+
+                // Redirect to the final download URL
+                window.location.href = downloadUrl;
+            } else {
+                console.error('Error: Invalid input URL');
+            }
         }
     </script>
 </head>
@@ -32,6 +30,4 @@
     <h1>URL Manipulation</h1>
     <label for="inputUrl">Enter GrabVR URL:</label>
     <input type="text" id="inputUrl" placeholder="https://grabvr.quest/levels/viewer/?level=...">
-    <button onclick="processURL()">Download</button>
-</body>
-</html>
+    <button onclick
