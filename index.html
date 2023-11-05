@@ -16,6 +16,7 @@
             justify-content: center;
             height: 100vh;
             position: relative;
+            transition: background-image 0.3s;
         }
 
         /* Main container styles with shadow effect */
@@ -27,6 +28,7 @@
             position: relative;
             z-index: 1;
             box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.5); /* Shadow effect */
+            transition: background-color 0.3s;
         }
 
         /* Input field styles */
@@ -58,6 +60,30 @@
         }
     </style>
     <script>
+        let rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
+        let currentColorIndex = 0;
+
+        let rgbMode = false;
+
+        function toggleRGBMode() {
+            rgbMode = !rgbMode;
+            updateColors();
+        }
+
+        function updateColors() {
+            const body = document.querySelector('body');
+            const container = document.querySelector('.container');
+            if (rgbMode) {
+                const randomColor = rainbowColors[currentColorIndex];
+                currentColorIndex = (currentColorIndex + 1) % rainbowColors.length;
+                body.style.backgroundImage = `linear-gradient(${randomColor}, #cfe0ea, ${randomColor})`;
+                container.style.backgroundColor = randomColor;
+            } else {
+                body.style.backgroundImage = 'linear-gradient(#5f8bc2, #cfe0ea, #5f8bc2)';
+                container.style.backgroundColor = 'white';
+            }
+        }
+
         async function download(link) {
             let SERVER_URL = 'https://api.slin.dev/grab/v1/';
             let id = link.match(/level=([^&]+)/)[1];
@@ -88,6 +114,8 @@
         <h1>GRAB Level Downloader</h1>
         <input type="text" id="inputUrl" class="input-url" placeholder="Paste GRAB Level Here">
         <button class="download-button" onclick="download(document.getElementById('inputUrl').value)">Download Level</button>
+        <br>
+        <button onclick="toggleRGBMode()">Toggle RGB Mode</button>
     </div>
 </body>
 </html>
