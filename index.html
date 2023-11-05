@@ -15,15 +15,31 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            position: relative;
         }
 
-        /* Main container styles */
+        /* Main container styles with shadow effect */
         .container {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sun effect in the top right corner */
+        .sun {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ffcc00; /* Sun color */
+            z-index: 0;
+            box-shadow: 0 0 50px 20px #ffcc00; /* Sun shadow effect */
         }
 
         /* Input field styles */
@@ -55,6 +71,7 @@
     </script>
 </head>
 <body>
+    <div class="sun"></div>
     <div class="container">
         <h1>GrabVR Level Downloader</h1>
         <input type="text" id="inputUrl" class="input-url" placeholder="https://grabvr.quest/levels/viewer/?level=...">
