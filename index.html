@@ -21,7 +21,8 @@
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    let fileName = Date.now() + '.level'; // Set filename as current epoch time + .level extension
+                    let currentEpochTime = Math.floor(Date.now() / 1000); // Current epoch time in seconds
+                    let fileName = currentEpochTime + '.level'; // Set filename as current epoch time + .level extension
                     a.download = fileName;
                     document.body.appendChild(a);
                     a.click();
