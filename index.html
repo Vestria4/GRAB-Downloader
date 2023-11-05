@@ -10,10 +10,21 @@
             var levelId = inputUrl.match(/level=([^&]+)/)[1];
             var userId = levelId.split(":")[0];
             var dataKey = levelId.replace(":", "/").replace(":", "/");
-            var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${dataKey}/#`;
+            var apiUrl = `https://api.slin.dev/grab/v1/list?max_format_version=7&user_id=${userId}`;
 
-            // Redirect to the final download URL
-            window.location.href = downloadUrl;
+            // Fetch the data_key from the API
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var dataKeyNumber = data.data_key.split(":")[3];
+                    var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${dataKey}/${dataKeyNumber}`;
+                    
+                    // Redirect to the final download URL
+                    window.location.href = downloadUrl;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     </script>
 </head>
