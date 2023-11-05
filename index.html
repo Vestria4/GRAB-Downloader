@@ -8,13 +8,11 @@
         function download(link) {
             let SERVER_URL = 'https://api.slin.dev/grab/v1/';
             let id = link.match(/level=([^&]+)/)[1];
-            let iterationId;
 
             fetch(SERVER_URL + 'details/' + id.replace(':', '/'))
                 .then(response => response.json())
                 .then(details => {
-                    iterationId = details.iteration;
-                    let downloadLink = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + iterationId;
+                    let downloadLink = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + details.iteration;
 
                     return fetch(downloadLink);
                 })
@@ -23,7 +21,8 @@
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    a.download = iterationId + '.level'; // Using the iterationId as the filename
+                    let fileName = Date.now() + '.level'; // Set filename as current epoch time + .level extension
+                    a.download = fileName;
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);
