@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrabVR Level Downloader</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(#5f8bc2, #cfe0ea, #5f8bc2);
+            color: #11324D; /* Dark blue text color */
+        }
+        #container {
+            text-align: center;
+            padding: 100px;
+        }
+        .button {
+            background-color: #11324D; /* Dark blue button background color */
+            color: #fff; /* White text color for the button */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #1C4D73; /* Dark blue button color on hover */
+        }
+    </style>
     <script>
         function download(link) {
             let SERVER_URL = 'https://api.slin.dev/grab/v1/';
@@ -33,9 +57,12 @@
     </script>
 </head>
 <body>
-    <h1>GrabVR Level Downloader</h1>
-    <label for="inputUrl">Enter GrabVR Level Link:</label>
-    <input type="text" id="inputUrl" placeholder="https://grabvr.quest/levels/viewer/?level=...">
-    <button onclick="download(document.getElementById('inputUrl').value)">Download Level</button>
+    <div id="container">
+        <h1>GrabVR Level Downloader</h1>
+        <label for="inputUrl">Enter GrabVR Level Link:</label>
+        <input type="text" id="inputUrl" placeholder="https://grabvr.quest/levels/viewer/?level=...">
+        <br><br>
+        <button class="button" onclick="download(document.getElementById('inputUrl').value)">Download Level</button>
+    </div>
 </body>
 </html>
