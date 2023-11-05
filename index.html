@@ -8,21 +8,21 @@
         function download(link) {
             let SERVER_URL = 'https://api.slin.dev/grab/v1/';
             let id = link.match(/level=([^&]+)/)[1];
-            let iteration;
             
             fetch(SERVER_URL + 'details/' + id.replace(':', '/'))
                 .then(response => response.json())
                 .then(details => {
-                    iteration = details.iteration;
-                    link = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + iteration;
-                    return fetch(link);
+                    let iterationId = details.iteration;
+                    let downloadLink = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + iterationId;
+
+                    return fetch(downloadLink);
                 })
                 .then(fileResponse => fileResponse.blob())
                 .then(blob => {
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    a.download = iteration + '.level';
+                    a.download = iterationId + '.level'; // Using the iterationId as the filename
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);
