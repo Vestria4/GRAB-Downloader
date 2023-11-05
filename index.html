@@ -71,7 +71,8 @@
                 let url = window.URL.createObjectURL(fileBlob);
                 let a = document.createElement('a');
                 a.href = url;
-                let fileName = Date.now() + '.level';
+                let date = new Date();
+                let fileName = `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}.level`;
                 a.download = fileName;
                 document.body.appendChild(a);
                 a.click();
