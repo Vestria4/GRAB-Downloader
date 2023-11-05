@@ -8,11 +8,12 @@
         function download(link) {
             let SERVER_URL = 'https://api.slin.dev/grab/v1/';
             let id = link.match(/level=([^&]+)/)[1];
-            
+            let iterationId;
+
             fetch(SERVER_URL + 'details/' + id.replace(':', '/'))
                 .then(response => response.json())
                 .then(details => {
-                    let iterationId = details.iteration;
+                    iterationId = details.iteration;
                     let downloadLink = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + iterationId;
 
                     return fetch(downloadLink);
