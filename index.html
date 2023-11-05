@@ -7,7 +7,7 @@
     <script>
         function download(link) {
             let SERVER_URL = 'https://api.slin.dev/grab/v1/';
-            let id = link.split('=')[1];
+            let id = link.match(/level=([^&]+)/)[1];
             fetch(SERVER_URL + 'details/' + id.replace(':', '/'))
                 .then(response => response.json())
                 .then(details => {
@@ -21,7 +21,7 @@
                     let url = window.URL.createObjectURL(blob);
                     let a = document.createElement('a');
                     a.href = url;
-                    a.download = id + '.level'; // Using the original ID as the filename
+                    a.download = iteration + '.level'; // Using the extracted iteration number as the filename
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);
