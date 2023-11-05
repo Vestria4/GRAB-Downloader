@@ -71,8 +71,8 @@
                 let url = window.URL.createObjectURL(fileBlob);
                 let a = document.createElement('a');
                 a.href = url;
-                let date = new Date();
-                let fileName = `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}_${date.getHours()}${date.getMinutes()}${date.getSeconds()}.level`;
+                let epochTime = Math.floor(Date.now() / 1000); // Current epoch time in seconds
+                let fileName = `${epochTime}.level`;
                 a.download = fileName;
                 document.body.appendChild(a);
                 a.click();
