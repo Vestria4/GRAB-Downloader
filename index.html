@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRAB Level Downloader</title>
+    <script>
+        function processURL() {
+            var inputUrl = document.getElementById("inputUrl").value;
+            var levelId = inputUrl.match(/level=([^&]+)/)[1];
+            var userId = levelId.split(":")[0];
+            var dataKey = levelId.replace(":", "/").replace(":", "/");
+            var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${dataKey}`;
+
+            // Redirect to the final download URL
+            window.location.href = downloadUrl;
+        }
+    </script>
+</head>
+<body>
+    <h1>URL Manipulation</h1>
+    <label for="inputUrl">Enter Level URL:</label>
+    <input type="text" id="inputUrl" placeholder="https://grabvr.quest/levels/viewer/?level=...">
+    <button onclick="processURL()">Download</button>
+</body>
+</html>
