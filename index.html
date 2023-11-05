@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Manipulation</title>
+    <title>URL Processing</title>
     <script>
         function processURL() {
-            var inputUrl = document.getElementById("inputUrl").value;
-            var levelId = inputUrl.match(/level=([^&]+)/)[1];
+            var inputURL = document.getElementById("inputURL").value;
+            var levelId = inputURL.match(/level=([^&]+)/)[1];
             var userId = levelId.split(":")[0];
-            var dataKey = levelId.replace(":", "/").replace(":", "/");
 
-            // Fetch the data_key from the input URL and remove prefix
-            var dataKeyRegex = /"data_key": "level_data:(.*?)"/;
-            var dataKeyMatch = inputUrl.match(dataKeyRegex);
-            if (dataKeyMatch && dataKeyMatch.length > 1) {
-                var extractedDataKey = dataKeyMatch[1];
-                var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${extractedDataKey.replace(/:/g, "/")}`;
+            var apiUrl = `https://api.slin.dev/grab/v1/list?max_format_version=7&user_id=${userId}`;
 
-                // Redirect to the final download URL
-                window.location.href = downloadUrl;
-            } else {
-                console.error('Error: Invalid input URL');
-            }
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var levelDataKey = data.levels[levelId].data_key;
+                    var processedKey = levelDataKey.replace(/:/g, '/');
+                    var downloadUrl = `https://api.slin.dev/grab/v1/download/${userId}/${levelId.split(":")[1]}/${processedKey}`;
+
+                    // Redirect the user to the constructed download URL
+                    window.location.href = downloadUrl;
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    alert("Error processing the URL. Please try again.");
+                });
         }
     </script>
 </head>
+
 <body>
-    <h1>URL Manipulation</h1>
-    <label for="inputUrl">Enter GrabVR URL:</label>
-    <input type="text" id="inputUrl" placeholder="https://grabvr.quest/levels/viewer/?level=...">
-    <button onclick
+    <h1>URL Processing</h1>
+    <label for="inputURL">Enter the URL:</label>
+    <input type="text" id="inputURL" placeholder="https://grabvr.quest/levels/viewer/?level=2axkwzh6f43g1regf401p:1688176571">
+    <button onclick="processURL()">Process</button>
+</body>
+
+</html>
