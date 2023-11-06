@@ -1,6 +1,6 @@
 # GRAB Level Downloader
 
-[GRAB Level Downloader](vestria4.github.io/GRAB-DOWNLOADER) allows people to download GRAB levels from https://grabvr.quest/levels by providing the level URL.
+GRAB Level Downloader. allows people to download GRAB levels from https://grabvr.quest/levels by providing the level URL.
 
 ## Features
 
