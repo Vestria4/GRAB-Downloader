@@ -55,88 +55,11 @@
         .download-button:hover {
             background-color: #001a29;
         }
-
-        .rgb-button {
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            border: none;
-            background-color: #003366;
-            color: white;
-            border-radius: 5px;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .rgb-button:hover {
-            background-color: #001a29;
-        }
-
-        @keyframes rainbow {
-            0% {
-                background-image: linear-gradient(#FF0000, #cfe0ea, #FF0000);
-            }
-
-            14.29% {
-                background-image: linear-gradient(#FF7F00, #cfe0ea, #FF7F00);
-            }
-
-            28.57% {
-                background-image: linear-gradient(#FFFF00, #cfe0ea, #FFFF00);
-            }
-
-            42.86% {
-                background-image: linear-gradient(#00FF00, #cfe0ea, #00FF00);
-            }
-
-            57.14% {
-                background-image: linear-gradient(#0000FF, #cfe0ea, #0000FF);
-            }
-
-            71.43% {
-                background-image: linear-gradient(#4B0082, #cfe0ea, #4B0082);
-            }
-
-            85.71% {
-                background-image: linear-gradient(#9400D3, #cfe0ea, #9400D3);
-            }
-
-            100% {
-                background-image: linear-gradient(#FF0000, #cfe0ea, #FF0000);
-            }
-        }
-
-        .rainbow-transition {
-            animation: rainbow 8s infinite linear;
-        }
     </style>
 
     <script>
-        let rgbMode = false;
-
-        function toggleRGBMode() {
-            rgbMode = !rgbMode;
-            updateColors();
-            if (rgbMode) {
-                document.body.classList.add('rainbow-transition');
-            } else {
-                document.body.classList.remove('rainbow-transition');
-            }
-        }
-
-        function updateColors() {
-            const body = document.querySelector('body');
-            if (rgbMode) {
-                body.style.backgroundImage = 'linear-gradient(#FF0000, #cfe0ea, #FF0000)';
-            } else {
-                body.style.backgroundImage = 'linear-gradient(#5f8bc2, #cfe0ea, #5f8bc2)';
-            }
-        }
-
         async function download(link) {
-            let SERVER_URL = 'https://api.slin.dev/grab/v1/';
+            let SERVER_URL = getServerUrl();
             let id = link.match(/level=([^&]+)/)[1];
 
             try {
@@ -158,6 +81,18 @@
                 console.error('Error:', error);
             }
         }
+
+        function getServerUrl() {
+            let currentHostname = window.location.hostname;
+            if (currentHostname === 'grabvr.quest') {
+                return 'https://grab-api-prod.slindev.workers.dev/grab/v1/'; // Production URL
+            } else if (currentHostname === 'develop.grab-website.pages.dev') {
+                return 'https://grab-api-dev.slindev.workers.dev/grab/v1/'; // Development URL
+            } else {
+                console.error('Unknown hostname:', currentHostname);
+                return '';
+            }
+        }
     </script>
 </head>
 
@@ -167,7 +102,6 @@
         <input type="text" id="inputUrl" class="input-url" placeholder="Paste GRAB Level Here">
         <button class="download-button" onclick="download(document.getElementById('inputUrl').value)">Download Level</button>
     </div>
-    <button class="rgb-button" onclick="toggleRGBMode()">Toggle RGB Mode</button>
 </body>
 
 </html>
