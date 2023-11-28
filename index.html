@@ -26,7 +26,7 @@
             text-align: center;
             position: relative;
             z-index: 1;
-            box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.23);
+            box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.5);
             transition: background-color 0.3s;
         }
 
@@ -59,7 +59,7 @@
 
     <script>
         async function download(link) {
-            let SERVER_URL = getServerUrl();
+            let SERVER_URL = 'https://api.slin.dev/grab/v1/';
             let id = link.match(/level=([^&]+)/)[1];
 
             try {
@@ -79,18 +79,6 @@
                 window.URL.revokeObjectURL(url);
             } catch (error) {
                 console.error('Error:', error);
-            }
-        }
-
-        function getServerUrl() {
-            let currentHostname = window.location.hostname;
-            if (currentHostname === 'grabvr.quest') {
-                return 'https://grab-api-prod.slindev.workers.dev/grab/v1/'; // Production URL
-            } else if (currentHostname === 'develop.grab-website.pages.dev') {
-                return 'https://grab-api-dev.slindev.workers.dev/grab/v1/'; // Development URL
-            } else {
-                console.error('Unknown hostname:', currentHostname);
-                return '';
             }
         }
     </script>
