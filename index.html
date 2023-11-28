@@ -58,8 +58,9 @@
     </style>
 
     <script>
+        let SERVER_URL = 'https://api.slin.dev/grab/v1/';
+
         async function download(link) {
-            let SERVER_URL = 'https://api.slin.dev/grab/v1/';
             let id = link.match(/level=([^&]+)/)[1];
 
             try {
