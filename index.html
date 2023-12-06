@@ -64,11 +64,26 @@
             let id = link.match(/level=([^&]+)/)[1];
 
             try {
-                let response = await fetch(SERVER_URL + 'details/' + id.replace(':', '/'));
-                let details = await response.json();
+                // Fetch details from the /details endpoint
+                let detailsResponse = await fetch(SERVER_URL + 'details/' + id.replace(':', '/'));
+                let details = await detailsResponse.json();
+
+                // If description is not present in /details response, fetch from /download
+                if (!details.description) {
+                    let downloadResponse = await fetch(SERVER_URL + 'download/' + id.replace(':', '/') + '/' + details.iteration);
+                    let downloadDetails = await downloadResponse.json();
+                    details.description = downloadDetails.description;
+                }
+
+                // Append " - Vestria Level Downloader" to the end of the description
+                details.description += " - Vestria Level Downloader";
+
+                // Fetch details from the /download endpoint
                 let downloadLink = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + details.iteration;
                 let fileResponse = await fetch(downloadLink);
                 let fileBlob = await fileResponse.blob();
+
+                // Create download link
                 let url = window.URL.createObjectURL(fileBlob);
                 let a = document.createElement('a');
                 a.href = url;
