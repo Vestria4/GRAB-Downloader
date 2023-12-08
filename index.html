@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GRAB Level Downloader</title>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="GRAB Level Downloader">
+    <meta property="og:description" content="Level Downloader for GRAB">
+    <meta name="theme-color" content="#003366">
+
+    <meta property="og:image" content="https://vestria4.github.io/GRAB-Downloader/Embed.png">
+
     <style>
         body {
             background-image: linear-gradient(#5f8bc2, #cfe0ea, #5f8bc2);
@@ -61,29 +68,32 @@
         let SERVER_URL = 'https://api.slin.dev/grab/v1/';
 
         async function download(link) {
-            let id = link.match(/level=([^&]+)/)[1];
-
             try {
-                // Fetch details from the /details endpoint
-                let detailsResponse = await fetch(SERVER_URL + 'details/' + id.replace(':', '/'));
+                let levelIdMatch = link.match(/level=([^&]+)/);
+                if (!levelIdMatch) {
+                    console.error('Invalid link format');
+                    return;
+                }
+
+                let levelId = levelIdMatch[1];
+
+                let detailsUrl = `${SERVER_URL}details/${levelId.replace(':', '/')}`;
+                let detailsResponse = await fetch(detailsUrl);
                 let details = await detailsResponse.json();
 
-                // If description is not present in /details response, fetch from /download
                 if (!details.description) {
-                    let downloadResponse = await fetch(SERVER_URL + 'download/' + id.replace(':', '/') + '/' + details.iteration);
+                    let downloadUrl = `${SERVER_URL}download/${levelId.replace(':', '/')}/${details.iteration}`;
+                    let downloadResponse = await fetch(downloadUrl);
                     let downloadDetails = await downloadResponse.json();
                     details.description = downloadDetails.description;
                 }
 
-                // Append " - Vestria Level Downloader" to the end of the description
                 details.description += " - Vestria Level Downloader";
 
-                // Fetch details from the /download endpoint
-                let downloadLink = SERVER_URL + 'download/' + id.replace(':', '/') + '/' + details.iteration;
+                let downloadLink = `${SERVER_URL}download/${levelId.replace(':', '/')}/${details.iteration}`;
                 let fileResponse = await fetch(downloadLink);
                 let fileBlob = await fileResponse.blob();
 
-                // Create download link
                 let url = window.URL.createObjectURL(fileBlob);
                 let a = document.createElement('a');
                 a.href = url;
